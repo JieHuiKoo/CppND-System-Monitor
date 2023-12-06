@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <filesystem>
+#include <iostream>
 
 #include "linux_parser.h"
 
@@ -50,20 +52,17 @@ string LinuxParser::Kernel() {
 // BONUS: Update this to use std::filesystem
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
-  while ((file = readdir(directory)) != nullptr) {
-    // Is this a directory?
-    if (file->d_type == DT_DIR) {
-      // Is every character of the name a digit?
-      string filename(file->d_name);
-      if (std::all_of(filename.begin(), filename.end(), isdigit)) {
-        int pid = stoi(filename);
-        pids.push_back(pid);
-      }
-    }
+  const std::filesystem::path pidsDirectory{kProcDirectory};
+  for (auto const& dir_entry : std::filesystem::directory_iterator{pidsDirectory})
+  {
+    // Extract the second /
+    std::string directory = dir_entry.path().string();
+    std::string delim = "/proc/";
+    std::string token = directory.substr(directory.find(delim)+delim.length(), directory.length());
+    
+    if (std::all_of(token.begin(), token.end(), [](unsigned char ch){return std::isdigit(ch);}))
+      pids.push_back(std::stoi(token));
   }
-  closedir(directory);
   return pids;
 }
 
