@@ -40,7 +40,7 @@ vector<Process>& System::Processes() {
         processes_.push_back(process);
     }
 
-    std::sort(processes_.begin(), processes_.end());
+    std::sort(processes_.begin(), processes_.end(), []( Process& a, Process& b) {return a.GetCpuUtilization() > b.GetCpuUtilization(); });
     return processes_; 
 }
 
