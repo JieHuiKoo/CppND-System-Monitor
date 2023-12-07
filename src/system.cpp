@@ -40,9 +40,6 @@ vector<Process>& System::Processes() {
         processes_.push_back(process);
     }
 
-    // std::cout << processes_[4].CpuUtilization() << std::endl;
-    // std::sort(processes_.begin(), processes_.end(), [](Process& lhs, Process& rhs){
-    //     return  lhs.GetCpuUtilization() > rhs.GetCpuUtilization();});
     std::sort(processes_.begin(), processes_.end());
     return processes_; 
 }
@@ -52,14 +49,7 @@ std::string System::Kernel() { return LinuxParser::Kernel();}
 
 // TODO: Return the system's memory utilization
 float System::MemoryUtilization() { 
-
-    float total_mem = 0;
-    for (auto process : processes_)
-    {
-        total_mem += std::stof(process.Ram());
-    }
-
-    return total_mem;
+    return LinuxParser::MemoryUtilization();
  }
 
 // TODO: Return the operating system name
@@ -76,4 +66,6 @@ int System::RunningProcesses() {
 int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
 // TODO: Return the number of seconds since the system started running
-long int System::UpTime() { return 0; }
+long int System::UpTime() { 
+    
+    return LinuxParser::UpTime();}
