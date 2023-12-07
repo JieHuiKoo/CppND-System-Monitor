@@ -19,30 +19,61 @@ using std::vector;
 You need to properly format the uptime. Refer to the comments mentioned in format. cpp for formatting the uptime.*/
 
 // TODO: Return the system's CPU
-Processor& System::Cpu() { return cpu_; }
+Processor& System::Cpu() { 
+    
+    cpu_ = Processor();
+
+    return cpu_;
+}
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() { 
+    
+    processes_ = {};
+
+    vector<int> pids = LinuxParser::Pids();
+
+    for (auto pid : pids)
+    {
+        // Create new process
+        Process process = Process(pid);
+        processes_.push_back(process);
+    }
+
+    // std::cout << processes_[4].CpuUtilization() << std::endl;
+    // std::sort(processes_.begin(), processes_.end(), [](Process& lhs, Process& rhs){
+    //     return  lhs.GetCpuUtilization() > rhs.GetCpuUtilization();});
+    std::sort(processes_.begin(), processes_.end());
+    return processes_; 
+}
 
 // TODO: Return the system's kernel identifier (string)
 std::string System::Kernel() { return LinuxParser::Kernel();}
 
 // TODO: Return the system's memory utilization
-float System::MemoryUtilization() { return 0.0; }
+float System::MemoryUtilization() { 
+
+    float total_mem = 0;
+    for (auto process : processes_)
+    {
+        total_mem += std::stof(process.Ram());
+    }
+
+    return total_mem;
+ }
 
 // TODO: Return the operating system name
 std::string System::OperatingSystem() {
     return LinuxParser::OperatingSystem();
-    }
+}
 
 // TODO: Return the number of processes actively running on the system
 int System::RunningProcesses() { 
-    LinuxParser::Pids();
-    return 0;
+   return LinuxParser::RunningProcesses();
 }
 
 // TODO: Return the total number of processes on the system
-int System::TotalProcesses() { return 0; }
+int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
 // TODO: Return the number of seconds since the system started running
 long int System::UpTime() { return 0; }
