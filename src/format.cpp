@@ -20,6 +20,7 @@ string Format::ElapsedTime(long seconds) {
     formatted += std::to_string(mins);
     formatted += ":";
     formatted += std::to_string(secs);
+    formatted += "     ";
 
     return formatted;
     }

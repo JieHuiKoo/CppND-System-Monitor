@@ -116,7 +116,7 @@ long int LinuxParser::UpTime() {
     uptime = std::stoi(uptime_str);
   }
   else{
-    std::cout << "Can't obtain system uptime" << std::endl;
+    // std::cout << "Can't obtain system uptime" << std::endl;
   }
 
   return uptime;
@@ -163,6 +163,9 @@ float LinuxParser::CpuUtilization(int pid) {
     float total_time = utime + stime + cutime + cstime;
     float seconds = uptime - (starttime/system_hertz);
     cpu_usage = ((total_time/system_hertz) / seconds);
+
+    if (cpu_usage < 0)
+      cpu_usage = 0;
   }
   else{
     // Process ended so we produce 0% usage
@@ -193,7 +196,7 @@ std::string LinuxParserHelper::GetStatLine(std::string stat, std::ifstream& stre
     }
   if (line == "")
   {
-    std::cout << stat << " key not found" << std::endl;
+    // std::cout << stat << " key not found" << std::endl;
   }
 
   return line;
@@ -349,6 +352,6 @@ long int LinuxParser::UpTime(int pid) {
   else{
     return -1;
   }
-  
-  return std::stol(stat_vector[21]); 
+
+  return LinuxParser::UpTime() - std::stol(stat_vector[21])/sysconf(_SC_CLK_TCK); 
 }
