@@ -28,11 +28,6 @@ float Process::CpuUtilization() {
     return cpuUtilization_;
 }
 
-float Process::GetCpuUtilization() { 
-    return cpuUtilization_;
-}
-
-
 // TODO: Return the command that generated this process
 string Process::Command() { return LinuxParser::Command(pid_); }
 
