@@ -76,7 +76,6 @@ float LinuxParser::MemoryUtilization() {
   std::string line, key, value;
   std::string memTotal_str = "";
   std::string memAvailable_str = "";
-  float memTotal, memAvailable;
 
   std::ifstream meminfoStream(LinuxParser::kProcDirectory + LinuxParser::kMeminfoFilename);
    if (meminfoStream.is_open()) {
@@ -121,19 +120,6 @@ long int LinuxParser::UpTime() {
 
   return uptime;
  }
-
-// TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
-
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
-
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return process CPU utilization
 float LinuxParser::CpuUtilization(int pid) { 
